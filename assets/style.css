@@ -1,0 +1,135 @@
+html,body {
+    width: 100%;
+    height: 100vh;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+/* Remove mode bar from all charts */
+.modebar {
+    display: none;
+}
+
+.center-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+#background {
+    background-image: url("https://cdn.dribbble.com/users/60166/screenshots/11442385/media/04245a13a17845b0bb38203e7bf4eac9.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: 3s;
+}
+
+.card {
+    background-color: rgba(0,0,0,0);
+    border: none;
+}
+
+.card-style {
+    border-radius: 50px;
+    background: #85D0EF;
+    box-shadow:  20px 20px 33px #56879b, 
+                 -20px -20px 33px #b4ffff;
+    padding: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .card-style {
+        border-radius: 50px;
+        background: #2A0892;
+        box-shadow:  20px 20px 33px #1b055f, 
+                     -20px -20px 33px #390bc5;
+        padding: 15px;
+    }
+    
+    #background {
+        background-image: url("https://cdn.dribbble.com/users/1803663/screenshots/7118089/media/79b667c8e423351aa97d0689fcae565c.jpg");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transition: 3s;
+    }
+}
+
+/* Github button */
+.fixed-btn {
+    border-radius: 150px;
+    height: 65px;
+    width: 65px;
+    transition: background 0.75s;
+    color: white;
+    border: 1px black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.btn-secondary {
+    background-color: blueviolet;
+}
+
+.fixed-btn:hover {
+  background-color: #119DFF;
+  opacity: .8;
+}
+
+.button-container {
+    position: fixed;
+    bottom: 3%;
+    right: 2%;
+}
+
+.icon {
+    font-size: 30px;
+    color: white;
+}
+
+.fixed-btn2 #theme-icon {
+    font-size: 50px;
+}
+
+#theme-button .btn-secondary, #theme-button .btn-secondary:active, #theme-button .btn-secondary:focus {
+    background-color: rgba(0,0,0,0);
+    border-color: rgba(0,0,0,0);
+}
+
+.fixed-btn2 {
+    border-radius: 150px;
+    height: 65px;
+    width: 65px;
+    transition: background 0.75s;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.button-container2 {
+    position: fixed;
+    top: 3%;
+    left: 2%;
+}
+
+.btn-secondary, .btn {
+    border-color: rgba(0,0,0,0) !important;
+    color: rgba(0,0,0,0) !important;
+    background-color: rgba(0,0,0,0) !important;
+}
+
+/*
+.flip-horizontally {
+  transform: scaleX(-1);
+}*/
