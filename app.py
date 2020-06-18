@@ -402,6 +402,8 @@ def update_theme(value, values, click, tallest, icon):
     #     return 'far fa-moon icon', {'background-image': 'url("./assets/img/sunset.jpg")'},  {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}, {'color':'white'}, bar_fig(user_, generate_sunset(user_))
     # return 'fas fa-sun icon', {'background-image': 'url("./assets/img/Tatooine.jpg")'}, {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}, {'color':'black'}, bar_fig(user_, generate_sunrise(user_))
     
+app.config.suppress_callback_exceptions = True
+
 def Homepage():
     return html.Div([
             html.Div(id='title'),
