@@ -167,7 +167,9 @@ def bar_fig(buildings, sun):
 
 
 buildings_card = [
+                    dcc.Loading(
                     dcc.Graph(id='buildings-fig')        
+                    )
                  ]
 
 modal = html.Div(
@@ -242,7 +244,7 @@ def toggle_modal(n1, submit, tall, is_open):
 )
 def update_buildings(value):
     if value is None:
-        value = 0
+        return ''
     return html.Div(
                 [
                     dbc.Row(
@@ -253,45 +255,6 @@ def update_buildings(value):
                     ) for a in range(1, value+1)
                 ], id='user-input'
             )
-
-# @app.callback(
-#     Output("button-options", "style"),
-#     [Input("nav-bars", "n_clicks")],
-# )
-# def toggle_nav(n_click):
-    
-#     if n_click is None:
-#         return {'opacity' : 0, 'transform': 'scale(0)'}
-    
-#     if n_click%2 == 1:
-#         return {'opacity' : 1, 'transform': 'scale(1)'}
-    
-#     return {'opacity' : 0, 'transform': 'scale(0)'}
-
-        
-# @app.callback(
-#     Output('buildings-fig', 'figure'),
-#     [Input('user-input', 'children'), Input('user-submit', 'n_clicks')],
-#     [State('theme-icon', "className")]
-# )
-# def display_output(values, click, icon):
-    
-#     if click:
-#         print(values)
-    
-#     #aaa = values
-      
-#     # Example of values
-#     #aaa = [{'props': {'children': [{'props': {'children': {'props': {'children': 'Building 1 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 2, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295227768}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': [{'props': {'children': {'props': {'children': 'Building 2 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 1, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295229722}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': [{'props': {'children': {'props': {'children': 'Building 3 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 4, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295233023}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}]
-    
-#     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
-    
-#     if icon == 'fas fa-sun icon':
-#         fig = bar_fig(user_, generate_sunrise(user_))
-#     if icon == 'far fa-moon icon':
-#         fig = bar_fig(user_, generate_sunset(user_))
-    
-#     return fig
 
 def tallest_towers():
     
@@ -351,7 +314,6 @@ def update_theme(value, values, click, tallest, icon):
             break
     
     if 'user-input.children' in changed_id:
-        #return 'fas fa-sun icon', {'background-image': 'url("./assets/img/Tatooine.jpg")'}, {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}, {'color':'black'}, bar_fig(user_, generate_sunrise(user_))
         return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
 
     if 'user-submit.n_clicks' in changed_id:        
@@ -422,5 +384,45 @@ def Homepage():
 app.layout = Homepage
 
 if __name__ == '__main__':
-    app.run_server()
-    # app.run_server(debug=True, use_reloader=False)
+    # app.run_server()
+    app.run_server(debug=True, use_reloader=False)
+
+
+# @app.callback(
+#     Output("button-options", "style"),
+#     [Input("nav-bars", "n_clicks")],
+# )
+# def toggle_nav(n_click):
+    
+#     if n_click is None:
+#         return {'opacity' : 0, 'transform': 'scale(0)'}
+    
+#     if n_click%2 == 1:
+#         return {'opacity' : 1, 'transform': 'scale(1)'}
+    
+#     return {'opacity' : 0, 'transform': 'scale(0)'}
+
+        
+# @app.callback(
+#     Output('buildings-fig', 'figure'),
+#     [Input('user-input', 'children'), Input('user-submit', 'n_clicks')],
+#     [State('theme-icon', "className")]
+# )
+# def display_output(values, click, icon):
+    
+#     if click:
+#         print(values)
+    
+#     #aaa = values
+      
+#     # Example of values
+#     #aaa = [{'props': {'children': [{'props': {'children': {'props': {'children': 'Building 1 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 2, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295227768}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': [{'props': {'children': {'props': {'children': 'Building 2 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 1, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295229722}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': [{'props': {'children': {'props': {'children': 'Building 3 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 4, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295233023}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}]
+    
+#     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
+    
+#     if icon == 'fas fa-sun icon':
+#         fig = bar_fig(user_, generate_sunrise(user_))
+#     if icon == 'far fa-moon icon':
+#         fig = bar_fig(user_, generate_sunset(user_))
+    
+#     return fig
