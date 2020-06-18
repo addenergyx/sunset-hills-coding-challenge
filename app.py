@@ -239,6 +239,8 @@ def toggle_modal(n1, submit, tall, is_open):
     [Input("num-buildings", "value")],
 )
 def update_buildings(value):
+    if value is None:
+        value = 0
     return html.Div(
                 [
                     dbc.Row(
