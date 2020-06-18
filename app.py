@@ -417,7 +417,7 @@ def Homepage():
 # we need to set layout to be a function so that for each new page load                                                                                                       
 # the layout is re-created with the current data, otherwise they will see                                                                                                     
 # data that was generated when the Dash app was first initialised             
-app.layout = Homepage()
+app.layout = Homepage
 
 if __name__ == '__main__':
     app.run_server()
