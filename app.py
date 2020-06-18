@@ -13,6 +13,7 @@ import pandas as pd
 import dash_daq as daq
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
+import random
 
 # buildings = [7,4,8,2,9,4]
 # prev_building = []
@@ -123,10 +124,10 @@ colors = {
          }
 
 def bar_fig(buildings, sun):
-            
+        
     traces = go.Bar(#name=buildings, 
-                 x=[*range(1, len(buildings)+1)],
-                 y=buildings,
+                 x=list(buildings.keys()),
+                 y=list(buildings.values()),
                  marker_color=[colors[x] for x in sun]),
     
     layout = go.Layout(paper_bgcolor='rgba(0,0,0,0)',
@@ -186,6 +187,7 @@ modal = html.Div(
                     ],style={'textAlign':'center'}),
                 dbc.ModalFooter(
                     [
+                        dbc.Button("Worlds Tallest Buildings", id="tallest-buildings", className="ml-auto"),
                         dbc.Button("Submit", id="user-submit", className="ml-auto", style={'background-image': 'linear-gradient(to bottom right, #FD7143, #2A0892)'}),
                     ]
                 ),
@@ -222,12 +224,14 @@ def button():
 
 @app.callback(
     Output("modal", "is_open"),
-    [Input("input-button", "n_clicks")],
+    [Input("input-button", "n_clicks"), Input('user-submit', 'n_clicks'), Input('tallest-buildings', 'n_clicks')],
     [State("modal", "is_open")],
 )
-def toggle_modal(n1, is_open):
-    if n1:
+def toggle_modal(n1, submit, tall, is_open):
+
+    if n1 or submit is not None or tall is not None:
         return not is_open
+    
     return is_open
 
 @app.callback(
@@ -240,7 +244,7 @@ def update_buildings(value):
                     dbc.Row(
                         [
                             dbc.Col(html.P(f'Building {a} height', className='util-name')),
-                            dbc.Col(dcc.Input(value=0, id={"building":'building-input-{a}', 'height':value}, type='number')),
+                            dbc.Col(dcc.Input(value=0, id='building-input-{a}', type='number')),
                         ], className='settings-block'
                     ) for a in range(1, value+1)
                 ], id='user-input'
@@ -285,32 +289,75 @@ def update_buildings(value):
     
 #     return fig
 
+def tallest_towers():
+    
+    #Could scrape data from a site but may increase execution time considerably
+    world_tallest_buildings = [828, 632, 601, 599, 554.5, 541.3, 530, 530, 528, 508]
+
+    tallest_buildings_names = ['Burj Khalifa', 'Shanghai Tower', 'Abraj Al-Bait Clock Tower', 
+         'Ping An Finance Center', 'Lotte World Tower', 'One World Trade Center', 
+         'Guangzhou CTF Finance Center', 'Tianjin CTF Finance Center', 'China Zun', 'Taipei 101']
+    
+    c = list(zip(world_tallest_buildings, tallest_buildings_names))
+    random.shuffle(c)
+    a, b = zip(*c)
+    
+    # world_tallest_buildings = list(a)
+    # tallest_buildings_names = list(b)
+    
+    towers_dict = dict(zip(list(b), list(a)))
+    
+    return towers_dict
+
+button_clicks_lis = []
+
 @app.callback([Output("theme-icon", "className"), Output("background", "style"), 
                Output("build","style"), Output('title', 'children'), Output('buildings-fig', 'figure')],
-              [Input("theme-button", "n_clicks"), Input('user-input', 'children'), Input('user-submit', 'n_clicks')],
-              [State('theme-icon', "className"), State('title', 'style')])
-def update_theme(value, values, click, icon, state):
+              [Input("theme-button", "n_clicks"), Input('user-input', 'children'), Input('user-submit', 'n_clicks'), Input('tallest-buildings', 'n_clicks')],
+              [State('theme-icon', "className")])
+def update_theme(value, values, click, tallest, icon):
+    
+    #print(state)
+    # print(values)
     
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
-    print([p['prop_id'] for p in dash.callback_context.triggered])
+    # print([p['prop_id'] for p in dash.callback_context.triggered])
+    # print(changed_id)
     
+    button_clicks_lis.insert(0, changed_id)
+    
+    # print(values)
+        
+    # print(button_clicks_lis)
+    
+    name_ = [a['props']['children'][0]['props']['children']['props']['children'].rstrip(' height') for a in values]
     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
-
+    
     ## If user leaves input blank replace none with 0
     user_ = [0 if v is None else v for v in user_]
-
+    
+    user_dict = dict(zip(name_, user_))
+    
+    for a in button_clicks_lis:
+        # print(a)
+        if a == 'tallest-buildings.n_clicks':
+            user_dict = tallest_towers()
+            break
+        if a == 'user-submit.n_clicks':
+            break
+    
     if 'user-input.children' in changed_id:
         #return 'fas fa-sun icon', {'background-image': 'url("./assets/img/Tatooine.jpg")'}, {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}, {'color':'black'}, bar_fig(user_, generate_sunrise(user_))
-        return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_, generate_sunrise(user_))
+        return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
 
     if 'user-submit.n_clicks' in changed_id:        
         if icon == 'fas fa-sun icon':
-            fig = bar_fig(user_, generate_sunrise(user_))
+            fig = bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
             background = {'background-image': 'url("./assets/img/Tatooine.jpg")'}
             block = {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}
             text = html.H1('Sunrise Fields', style={'color':'black'})
         else:
-            fig = bar_fig(user_, generate_sunset(user_))
+            fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
             background = {'background-image': 'url("./assets/img/sunset.jpg")'}
             block = {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}
             text = html.H1('Sunset Hills', style={'color':'white'})
@@ -318,17 +365,32 @@ def update_theme(value, values, click, icon, state):
     if 'theme-button.n_clicks' in changed_id:
         if icon == 'fas fa-sun icon':
             icon = 'far fa-moon icon'
-            fig = bar_fig(user_, generate_sunset(user_))
+            fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
             background = {'background-image': 'url("./assets/img/sunset.jpg")'}
             block = {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}
             text = [html.H1('Sunset Hills', style={'color':'white'})]
         else: 
             icon ='fas fa-sun icon'
-            fig = bar_fig(user_, generate_sunrise(user_))
+            fig = bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
             background = {'background-image': 'url("./assets/img/Tatooine.jpg")'}
             block = {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}
             text = [html.H1('Sunrise Fields', style={'color':'black'})]
     
+    if 'tallest-buildings.n_clicks' in changed_id:
+        
+        user_dict = tallest_towers()
+        
+        if icon == 'fas fa-sun icon':
+            background = {'background-image': 'url("./assets/img/Tatooine.jpg")'}
+            text = html.H1('Sunrise Fields', style={'color':'black'})
+            block = {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}
+            fig = bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
+        else:
+            background = {'background-image': 'url("./assets/img/sunset.jpg")'}
+            block = {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}
+            text = html.H1('Sunset Hills', style={'color':'white'})
+            fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
+            
     # if not user_:
     #     user_ = [0,0,0,0,0]
     
