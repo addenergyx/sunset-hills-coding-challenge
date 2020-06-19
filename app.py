@@ -15,8 +15,6 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import random
 
-button_clicks_lis = []
-
 external_stylesheets =['https://codepen.io/IvanNieto/pen/bRPJyb.css', dbc.themes.BOOTSTRAP, 
                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css']
 
@@ -69,8 +67,6 @@ app.index_string = '''
 
 app.title = 'Sunset Hills, Coding Challenge'
 
-## sunset
-
 def generate_sunset(buildings):
     
     prev_building = []
@@ -84,7 +80,7 @@ def generate_sunset(buildings):
     
         prev_building.append(building)
         
-    sunset_buildings = sunset.count(True)
+    #sunset_buildings = sunset.count(True)
     
     return sunset
 
@@ -101,7 +97,7 @@ def generate_sunrise(buildings):
     
         prev_building.append(building)
         
-    sunrise_buildings = sunrise.count(True)
+    #sunrise_buildings = sunrise.count(True)
     
     sunrise = sunrise[::-1]
     
@@ -109,7 +105,7 @@ def generate_sunrise(buildings):
 
 colors = {
             True:'yellow',
-            False:'grey',
+            False:'firebrick',
          }
 
 def bar_fig(buildings, sun):
@@ -118,7 +114,7 @@ def bar_fig(buildings, sun):
                  x=list(buildings.keys()),
                  y=list(buildings.values()),
                  marker_color=[colors[x] for x in sun]),
-    
+
     layout = go.Layout(paper_bgcolor='rgba(0,0,0,0)',
                plot_bgcolor='rgba(0,0,0,0)',
                 font={
@@ -147,10 +143,8 @@ def bar_fig(buildings, sun):
                       t=0,
                 ),
             )
-    
-    fig = go.Figure(data=traces, layout=layout)
 
-    return fig
+    return go.Figure(data=traces, layout=layout)
 
 
 buildings_card = [
@@ -238,7 +232,7 @@ def update_buildings(value):
 
 def tallest_towers():
     
-    #Could scrape data from a site but may increase execution time considerably
+    # Could scrape data from a site but may increase execution time considerably
     world_tallest_buildings = [828, 632, 601, 599, 554.5, 541.3, 530, 530, 528, 508]
 
     tallest_buildings_names = ['Burj Khalifa', 'Shanghai Tower', 'Abraj Al-Bait Clock Tower', 
@@ -263,22 +257,11 @@ def tallest_towers():
 def update_theme(value, values, click, tallest, icon, state):
     
     if state is None:
-        state=[]
-    print('--------')
-    print(state)
-    # print(values)
+        state = []
     
-    # changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered]
-    # print([p['prop_id'] for p in dash.callback_context.triggered])
-    #print(changed_id)
-    
-    # button_clicks_lis.insert(0, changed_id)
+
     state.insert(0, changed_id)
-    
-    # print(values)
-        
-    # print(button_clicks_lis)
     
     name_ = [a['props']['children'][0]['props']['children']['props']['children'].rstrip(' height') for a in values]
     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
@@ -296,10 +279,6 @@ def update_theme(value, values, click, tallest, icon, state):
         if a == ['user-submit.n_clicks']:
             break
     
-    # print('-----1-------')
-    # print(user_dict)
-    # print('-----2-------')
-    
     if 'user-input.children' in changed_id:
         return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_dict, generate_sunrise(list(user_dict.values()))), state
 
@@ -316,8 +295,6 @@ def update_theme(value, values, click, tallest, icon, state):
             text = html.H1('Sunset Hills', style={'color':'white'})
             
     if 'theme-button.n_clicks' in changed_id:
-        # print(user_dict)
-        # print('-------------')
         if icon == 'fas fa-sun icon':
             icon = 'far fa-moon icon'
             fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
@@ -345,18 +322,9 @@ def update_theme(value, values, click, tallest, icon, state):
             block = {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}
             text = html.H1('Sunset Hills', style={'color':'white'})
             fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
-            
-    # if not user_:
-    #     user_ = [0,0,0,0,0]
-    
-    # fig = bar_fig(user_, generate_sunrise(user_))
     
     return icon, background, block, text, fig, state
-    
-    # if icon == 'fas fa-sun icon':
-    #     return 'far fa-moon icon', {'background-image': 'url("./assets/img/sunset.jpg")'},  {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}, {'color':'white'}, bar_fig(user_, generate_sunset(user_))
-    # return 'fas fa-sun icon', {'background-image': 'url("./assets/img/Tatooine.jpg")'}, {'background': '#FD7143', 'box-shadow' : '-12px 12px 24px #652d1b, 12px -12px 24px #ffb56b'}, {'color':'black'}, bar_fig(user_, generate_sunrise(user_))
-    
+      
 def Homepage():
     return html.Div([
             html.Div(id='title'),
@@ -376,42 +344,3 @@ if __name__ == '__main__':
     # app.run_server()
     app.run_server(debug=True, use_reloader=False)
 
-
-# @app.callback(
-#     Output("button-options", "style"),
-#     [Input("nav-bars", "n_clicks")],
-# )
-# def toggle_nav(n_click):
-    
-#     if n_click is None:
-#         return {'opacity' : 0, 'transform': 'scale(0)'}
-    
-#     if n_click%2 == 1:
-#         return {'opacity' : 1, 'transform': 'scale(1)'}
-    
-#     return {'opacity' : 0, 'transform': 'scale(0)'}
-
-        
-# @app.callback(
-#     Output('buildings-fig', 'figure'),
-#     [Input('user-input', 'children'), Input('user-submit', 'n_clicks')],
-#     [State('theme-icon', "className")]
-# )
-# def display_output(values, click, icon):
-    
-#     if click:
-#         print(values)
-    
-#     #aaa = values
-      
-#     # Example of values
-#     #aaa = [{'props': {'children': [{'props': {'children': {'props': {'children': 'Building 1 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 2, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295227768}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': [{'props': {'children': {'props': {'children': 'Building 2 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 1, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295229722}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': [{'props': {'children': {'props': {'children': 'Building 3 height', 'className': 'util-name'}, 'type': 'P', 'namespace': 'dash_html_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}, {'props': {'children': {'props': {'id': {'building': 'building-input-{a}', 'height': 3}, 'value': 4, 'type': 'number', 'n_blur': 1, 'n_blur_timestamp': 1592295233023}, 'type': 'Input', 'namespace': 'dash_core_components'}}, 'type': 'Col', 'namespace': 'dash_bootstrap_components/_components'}], 'className': 'settings-block'}, 'type': 'Row', 'namespace': 'dash_bootstrap_components/_components'}]
-    
-#     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
-    
-#     if icon == 'fas fa-sun icon':
-#         fig = bar_fig(user_, generate_sunrise(user_))
-#     if icon == 'far fa-moon icon':
-#         fig = bar_fig(user_, generate_sunset(user_))
-    
-#     return fig
