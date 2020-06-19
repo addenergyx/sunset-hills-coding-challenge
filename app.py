@@ -32,7 +32,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
 
                     {
                         'property':'og:image',
-                        'content':'',
+                        'content':'https://i.imgur.com/6N6Zpit.jpg',
                     },
                     {
                         'name':'title',
