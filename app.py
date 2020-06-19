@@ -142,16 +142,17 @@ def bar_fig(buildings, sun):
                       b=0,
                       t=0,
                 ),
+                transition={
+                    'duration': 500,
+                    'easing': 'cubic-in-out',
+                }
             )
 
     return go.Figure(data=traces, layout=layout)
 
 
 buildings_card = [
-                    dcc.Loading(
-                        dcc.Graph(id='buildings-fig'), 
-                        type="circle",        
-                    )
+                    dcc.Graph(id='buildings-fig'), 
                  ]
 
 modal = html.Div(
