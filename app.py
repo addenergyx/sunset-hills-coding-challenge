@@ -276,7 +276,7 @@ def update_theme(value, values, click, tallest, icon):
     
     # print(values)
         
-    # print(button_clicks_lis)
+    print(button_clicks_lis)
     
     name_ = [a['props']['children'][0]['props']['children']['props']['children'].rstrip(' height') for a in values]
     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
@@ -287,7 +287,7 @@ def update_theme(value, values, click, tallest, icon):
     user_dict = dict(zip(name_, user_))
         
     for a in button_clicks_lis:
-        # print(a)
+        print(a)
         if a == 'tallest-buildings.n_clicks':
             user_dict = tallest_towers()
             break
