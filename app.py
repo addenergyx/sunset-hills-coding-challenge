@@ -303,12 +303,12 @@ def update_theme(value, values, click, tallest, icon):
     
     name_ = [a['props']['children'][0]['props']['children']['props']['children'].rstrip(' height') for a in values]
     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
-    
+        
     ## If user leaves input blank replace none with 0
     user_ = [0 if v is None else v for v in user_]
     
     user_dict = dict(zip(name_, user_))
-    
+        
     for a in button_clicks_lis:
         # print(a)
         if a == 'tallest-buildings.n_clicks':
@@ -316,6 +316,10 @@ def update_theme(value, values, click, tallest, icon):
             break
         if a == 'user-submit.n_clicks':
             break
+    
+    print('-----1-------')
+    print(user_dict)
+    print('-----2-------')
     
     if 'user-input.children' in changed_id:
         return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
@@ -333,6 +337,8 @@ def update_theme(value, values, click, tallest, icon):
             text = html.H1('Sunset Hills', style={'color':'white'})
             
     if 'theme-button.n_clicks' in changed_id:
+        print(user_dict)
+        print('-------------')
         if icon == 'fas fa-sun icon':
             icon = 'far fa-moon icon'
             fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
