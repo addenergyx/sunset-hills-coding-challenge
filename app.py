@@ -23,7 +23,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
                     { 'name':'viewport','content':'width=device-width, initial-scale=1, shrink-to-fit=no' },
                     {
                         'name':'description',
-                        'content':'An array of buildings is facing the sun. Theheights of each building from West to East isgiven in an integer array. You have to tell whichbuildings will be able to see the sunset.',
+                        'content':'Coder Foundry coding challenge. An array of buildings is facing the sun. The heights of each building from West to East isgiven in an integer array. You have to tell whichbuildings will be able to see the sunset.',
                     },
                     {
                         'name':'keywords',
