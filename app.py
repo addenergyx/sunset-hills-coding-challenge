@@ -15,6 +15,8 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import random
 
+button_clicks_lis = []
+
 external_stylesheets =['https://codepen.io/IvanNieto/pen/bRPJyb.css', dbc.themes.BOOTSTRAP, 
                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css']
 
@@ -257,8 +259,6 @@ def tallest_towers():
     
     return towers_dict
 
-button_clicks_lis = []
-
 @app.callback([Output("theme-icon", "className"), Output("background", "style"), 
                Output("build","style"), Output('title', 'children'), Output('buildings-fig', 'figure')],
               [Input("theme-button", "n_clicks"), Input('user-input', 'children'), Input('user-submit', 'n_clicks'), Input('tallest-buildings', 'n_clicks')],
@@ -268,9 +268,10 @@ def update_theme(value, values, click, tallest, icon):
     #print(state)
     # print(values)
     
-    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    # changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered]
     # print([p['prop_id'] for p in dash.callback_context.triggered])
-    # print(changed_id)
+    print(changed_id)
     
     button_clicks_lis.insert(0, changed_id)
     
@@ -285,13 +286,13 @@ def update_theme(value, values, click, tallest, icon):
     user_ = [0 if v is None else v for v in user_]
     
     user_dict = dict(zip(name_, user_))
-        
+            
     for a in button_clicks_lis:
         print(a)
-        if a == 'tallest-buildings.n_clicks':
+        if a == ['tallest-buildings.n_clicks']:
             user_dict = tallest_towers()
             break
-        if a == 'user-submit.n_clicks':
+        if a == ['user-submit.n_clicks']:
             break
     
     print('-----1-------')
