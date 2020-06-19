@@ -168,7 +168,8 @@ def bar_fig(buildings, sun):
 
 buildings_card = [
                     dcc.Loading(
-                    dcc.Graph(id='buildings-fig')        
+                        dcc.Graph(id='buildings-fig'), 
+                        type="circle",        
                     )
                  ]
 
@@ -191,7 +192,7 @@ modal = html.Div(
                     ],style={'textAlign':'center'}),
                 dbc.ModalFooter(
                     [
-                        dbc.Button("Worlds Tallest Buildings", id="tallest-buildings", className="ml-auto"),
+                        dbc.Button("Worlds Tallest Buildings", id="tallest-buildings"),
                         dbc.Button("Submit", id="user-submit", className="ml-auto", style={'background-image': 'linear-gradient(to bottom right, #FD7143, #2A0892)'}),
                     ]
                 ),
@@ -243,6 +244,9 @@ def toggle_modal(n1, submit, tall, is_open):
     [Input("num-buildings", "value")],
 )
 def update_buildings(value):
+    
+    print(value)
+    
     if value is None:
         return ''
     return html.Div(
