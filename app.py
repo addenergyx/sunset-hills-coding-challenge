@@ -222,10 +222,7 @@ def toggle_modal(n1, submit, tall, is_open):
     Output("row-buildings", "children"),
     [Input("num-buildings", "value")],
 )
-def update_buildings(value):
-    
-    print(value)
-    
+def update_buildings(value):    
     if value is None:
         return ''
     return html.Div(
@@ -260,24 +257,28 @@ def tallest_towers():
     return towers_dict
 
 @app.callback([Output("theme-icon", "className"), Output("background", "style"), 
-               Output("build","style"), Output('title', 'children'), Output('buildings-fig', 'figure')],
+               Output("build","style"), Output('title', 'children'), Output('buildings-fig', 'figure'), Output('data','children')],
               [Input("theme-button", "n_clicks"), Input('user-input', 'children'), Input('user-submit', 'n_clicks'), Input('tallest-buildings', 'n_clicks')],
-              [State('theme-icon', "className")])
-def update_theme(value, values, click, tallest, icon):
+              [State('theme-icon', "className"), State('data','children')])
+def update_theme(value, values, click, tallest, icon, state):
     
-    #print(state)
+    if state is None:
+        state=[]
+    print('--------')
+    print(state)
     # print(values)
     
     # changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered]
     # print([p['prop_id'] for p in dash.callback_context.triggered])
-    print(changed_id)
+    #print(changed_id)
     
-    button_clicks_lis.insert(0, changed_id)
+    # button_clicks_lis.insert(0, changed_id)
+    state.insert(0, changed_id)
     
     # print(values)
         
-    print(button_clicks_lis)
+    # print(button_clicks_lis)
     
     name_ = [a['props']['children'][0]['props']['children']['props']['children'].rstrip(' height') for a in values]
     user_ = [a['props']['children'][1]['props']['children']['props']['value'] for a in values]
@@ -287,20 +288,20 @@ def update_theme(value, values, click, tallest, icon):
     
     user_dict = dict(zip(name_, user_))
             
-    for a in button_clicks_lis:
-        print(a)
+    for a in state:
+        # print(a)
         if a == ['tallest-buildings.n_clicks']:
             user_dict = tallest_towers()
             break
         if a == ['user-submit.n_clicks']:
             break
     
-    print('-----1-------')
-    print(user_dict)
-    print('-----2-------')
+    # print('-----1-------')
+    # print(user_dict)
+    # print('-----2-------')
     
     if 'user-input.children' in changed_id:
-        return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_dict, generate_sunrise(list(user_dict.values())))
+        return 'fas fa-cloud-sun icon', {}, {}, '', bar_fig(user_dict, generate_sunrise(list(user_dict.values()))), state
 
     if 'user-submit.n_clicks' in changed_id:        
         if icon == 'fas fa-sun icon':
@@ -315,8 +316,8 @@ def update_theme(value, values, click, tallest, icon):
             text = html.H1('Sunset Hills', style={'color':'white'})
             
     if 'theme-button.n_clicks' in changed_id:
-        print(user_dict)
-        print('-------------')
+        # print(user_dict)
+        # print('-------------')
         if icon == 'fas fa-sun icon':
             icon = 'far fa-moon icon'
             fig = bar_fig(user_dict, generate_sunset(list(user_dict.values())))
@@ -350,7 +351,7 @@ def update_theme(value, values, click, tallest, icon):
     
     # fig = bar_fig(user_, generate_sunrise(user_))
     
-    return icon, background, block, text, fig
+    return icon, background, block, text, fig, state
     
     # if icon == 'fas fa-sun icon':
     #     return 'far fa-moon icon', {'background-image': 'url("./assets/img/sunset.jpg")'},  {'background': '#2A0892', 'box-shadow':  '12px -12px 24px #180555, -12px 12px 24px #3c0bcf'}, {'color':'white'}, bar_fig(user_, generate_sunset(user_))
@@ -363,7 +364,7 @@ def Homepage():
             html.Div(button()),
             html.Div(modal),
             html.Div(dbc.Card(buildings_card, id='build', className='card-style'), id='buildings-card', className='center-screen'),
-            html.Div(id='data'),
+            html.Div(id='data', hidden=True),
         ], id='background')
 
 # we need to set layout to be a function so that for each new page load                                                                                                       
