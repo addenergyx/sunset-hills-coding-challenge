@@ -105,7 +105,7 @@ def generate_sunrise(buildings):
 
 colors = {
             True:'yellow',
-            False:'firebrick',
+            False:'maroon',
          }
 
 def bar_fig(buildings, sun):
