@@ -15,21 +15,6 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import random
 
-# buildings = [7,4,8,2,9,4]
-# prev_building = []
-# sunset = []
-
-# for building in buildings:
-    
-#     if not prev_building or building > max(prev_building):
-#         sunset.append(True)
-#     else:
-#         sunset.append(False)
-
-#     prev_building.append(building)
-    
-# sun_buildings = sunset.count(True)
-
 external_stylesheets =['https://codepen.io/IvanNieto/pen/bRPJyb.css', dbc.themes.BOOTSTRAP, 
                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css']
 
@@ -218,14 +203,6 @@ def button():
                         ],className='button-options', id='button-options')
                 ], className='button-container'
               ),
-
-# @app.callback(Output('buildings-fig', 'figure'),[Input("theme-button", "n_clicks")])
-# def update_sun(clicks):
-    
-#     if clicks == None:
-#         return bar_fig(buildings, sunset)
-    
-#     return bar_fig(buildings, sunrise)
 
 @app.callback(
     Output("modal", "is_open"),
